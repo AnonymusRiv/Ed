@@ -1,5 +1,10 @@
 #!/bin/bash
 #Version: 1.0
+#Versión: 1.1
+#- Fixed bug asking for LOGIN twice.
+#- Added a disclamer header.
+#
+#
 #Utiliza este script para ver si tu entrega cumple con la normativa.
 #Se asume que tienes una instalación Linux estándar. Este script ha sido probado en
 #en la plataforma de referencia que es ThinStation de la Uco.
@@ -15,6 +20,27 @@
 #Se asume que está el fichero zip con la entrega a comprobar en la misma carpeta.
 #
 
+cat <<__END__
+
+****
+Este script asume que el fichero zip con tu entrega está en la carpeta donde
+estás ejecutando este script y comprueba si tu entrega cumple con los
+requisitos, pero como todo programa puede tener fallos.
+
+Es tú responsabilidad cumplir con los requisitos de entrega publicados en la
+página moodel y en caso de conflicto con este script, tienen prioridad los
+requisitos publicados.
+
+
+__END__
+
+echo "Has leído y comprendido los requisitos publicados en moodle? "
+read -p "[s|N]" resp
+if [ "$resp" = "s" ]; then :
+else
+   echo "Entonces, lo mejor es que los leas detenidamente antes."
+   exit 0
+fi
 
 set -u
 set +e
@@ -26,7 +52,7 @@ else
    echo "Entonces, comprueba la versión CHANGELOG.TXT de moodle con la tuya."
    exit 0
 fi
-read LOGIN
+
 echo "Cual es tu login (p.ej. i02pelur): "
 read LOGIN
 FZIP="${LOGIN}.zip"

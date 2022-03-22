@@ -287,7 +287,7 @@ template<class T>
   BTree<T>::BTree (typename BTNode<T>::Ref n)
   {
       //TODO
-
+        root_=n;
       //
       assert(root()==n);
   }
@@ -306,7 +306,7 @@ template<class T>
   {
       typename BTNode<T>::Ref node;
       //TODO
-
+        node = root_;
       //
       return node;
   }
@@ -315,7 +315,7 @@ template<class T>
   void BTree<T>::set_root(typename BTNode<T>::Ref new_root)
   {
       //TODO
-  
+        root_->set_root(new_root);
       //
       assert(root()==new_root);
   }

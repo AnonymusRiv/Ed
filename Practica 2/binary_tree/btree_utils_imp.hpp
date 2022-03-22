@@ -25,7 +25,12 @@ int compute_height (typename BTree<T>::Ref t)
     if(!t->is_empty()){
         int left = compute_height<T>(t->left()) + 1;
         int right = compute_height<T>(t->right()) + 1;
-        (left >= right) ? height = left : height = right;
+        if(left >= right){
+            height=left;
+        }
+        else{
+            height=right;
+        }
     }
     else{
         height=-1;
@@ -54,9 +59,8 @@ prefix_process(typename BTree<T>::Ref tree, Processor& p)
     assert(tree != nullptr);
     bool retVal = true;
     //TODO
-    if(!tree->is_empty())
-    {
-        retVal = retVal && p(tree->item());
+    if(!tree->is_empty()){
+        retVal = p(tree->item());
         retVal = retVal && prefix_process<T, Processor>(tree->left(), p);
         retVal = retVal && prefix_process<T, Processor>(tree->right(), p);
     }
@@ -73,7 +77,7 @@ infix_process(typename BTree<T>::Ref tree, Processor& p)
     //TODO
     if(!tree->is_empty())
     {
-        retVal = retVal && infix_process<T, Processor>(tree->left(), p);
+        retVal = infix_process<T, Processor>(tree->left(), p);
         retVal = retVal && p(tree->item());
         retVal = retVal && infix_process<T, Processor>(tree->right(), p);
     }
@@ -90,7 +94,7 @@ postfix_process(typename BTree<T>::Ref tree, Processor& p)
     //TODO
     if(!tree->is_empty())
     {
-        retVal = retVal && postfix_process<T, Processor>(tree->left(), p);
+        retVal = postfix_process<T, Processor>(tree->left(), p);
         retVal = retVal && postfix_process<T, Processor>(tree->right(), p);
         retVal = retVal && p(tree->item());
     }
@@ -133,7 +137,11 @@ print_prefix(std::ostream& out, typename BTree<T>::Ref tree)
     //You must create a lambda function with a parameter to be printed and
     //  use a prefix_process to process the tree with this lambda.
     //Remenber: the lambda must return true.
-
+    auto p=[&out](T n) mutable->bool{
+        out << n << " ";
+        return true;
+    };
+    prefix_process<T>(tree,p);
     //
     return out;
 }
@@ -146,7 +154,11 @@ print_infix(std::ostream& out, typename BTree<T>::Ref tree)
     //You must create a lambda function with a parameter to be printed and
     //  use a infix_process to process the tree with this lambda.
     //Remenber: the lambda must return true.
-
+    auto p=[&out](T n) mutable->bool{
+        out << n << " ";
+        return true;
+    };
+    infix_process<T>(tree,p);
     //
     return out;
 }
@@ -159,7 +171,11 @@ print_postfix(std::ostream& out, typename BTree<T>::Ref tree)
     //You must create a lambda function with a parameter to be printed and
     //  use a postfix_process to process the tree with this lambda.
     //Remenber: the lambda must return true.
-
+    auto p=[&out](T n) mutable->bool{
+        out << n << " ";
+        return true;
+    };
+    postfix_process<T>(tree,p);
     //
     return out;
 }
@@ -172,7 +188,11 @@ print_breadth_first(std::ostream& out, typename BTree<T>::Ref tree)
     //You must create a lambda function with a parameter to be printed and
     //  use a breadth_first_process to process the tree with this lambda.
     //Remenber: the lambda must return true.
-
+    auto p=[&out](T n) mutable->bool{
+        out << n << " ";
+        return true;
+    };
+    breadth_first_process<T>(tree,p);
     //
     return out;
 }
@@ -188,7 +208,15 @@ bool search_prefix(typename BTree<T>::Ref tree, const T& it, size_t& count)
     // Use the lambda with in the prefix_process.
     //Remenber: Also, the lambda must update the count variable and
     //must return True/False.
-
+    auto f = [it, &found, &count](T n)mutable->bool {
+        count++;
+        if(it==n){
+            found=true;
+            return false;
+        }
+        return true;
+    }; //recibe el nodo procesado e imprime por pantalla el nodo
+    prefix_process<T>(tree, f);
     //
     return found;
 }
@@ -204,7 +232,15 @@ bool search_infix(typename BTree<T>::Ref tree, const T& it, size_t& count)
     // Use the lambda with in the infix_process.
     //Remenber: Also, the lambda must update the count variable and
     //must return True/False.
-
+    auto p=[&found,it,&count](T n)mutable->bool{
+        count++;
+        if(it==n){
+            found=true;
+            return false;
+        }
+        return true;
+    };
+    infix_process<T>(tree,p);
     //
     return found;
 }
@@ -220,7 +256,15 @@ bool search_postfix(typename BTree<T>::Ref tree, const T& it, size_t& count)
     // Use the lambda with in the postfix_process.
     //Remenber: Also, the lambda must update the count variable and
     //must return True/False.
-
+    auto p=[&found,it,&count](T n)mutable->bool{
+        count++;
+        if(it==n){
+            found=true;
+            return false;
+        }
+        return true;
+    };
+    postfix_process<T>(tree,p);
     //
     return found;
 }
@@ -236,7 +280,15 @@ bool search_breadth_first(typename BTree<T>::Ref tree, const T& it, size_t& coun
     // Use the lambda with in the breadth_first_process.
     //Remenber: Also, the lambda must update the count variable and
     //must return True/False.
-
+    auto p=[&found,it,&count](T n)mutable->bool{
+        count++;
+        if(it==n){
+            found=true;
+            return false;
+        }
+        return true;
+    };
+    breadth_first_process<T>(tree,p);
     //
     return found;
 }

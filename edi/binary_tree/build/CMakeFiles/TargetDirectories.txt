@@ -1,4 +1,0 @@
-/home/anonymusriv/Escritorio/UCO/2curso/2cuatri/ED/edi/binary_tree/build/CMakeFiles/rebuild_cache.dir
-/home/anonymusriv/Escritorio/UCO/2curso/2cuatri/ED/edi/binary_tree/build/CMakeFiles/edit_cache.dir
-/home/anonymusriv/Escritorio/UCO/2curso/2cuatri/ED/edi/binary_tree/build/CMakeFiles/test_btree.dir
-/home/anonymusriv/Escritorio/UCO/2curso/2cuatri/ED/edi/binary_tree/build/CMakeFiles/test_btree_node.dir
