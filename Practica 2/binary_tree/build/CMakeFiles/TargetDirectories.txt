@@ -1,4 +1,0 @@
-/home/anonymusriv/Escritorio/Ed/Practica 2/binary_tree/build/CMakeFiles/rebuild_cache.dir
-/home/anonymusriv/Escritorio/Ed/Practica 2/binary_tree/build/CMakeFiles/edit_cache.dir
-/home/anonymusriv/Escritorio/Ed/Practica 2/binary_tree/build/CMakeFiles/test_btree.dir
-/home/anonymusriv/Escritorio/Ed/Practica 2/binary_tree/build/CMakeFiles/test_btree_node.dir
