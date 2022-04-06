@@ -140,7 +140,11 @@ protected:
 
     //TODO
     //Give a representation.
-
+    T item_;
+    AVLTNode<T>::Ref parent_;
+    AVLTNode<T>::Ref left_;
+    AVLTNode<T>::Ref right_;
+    int height_;
     //
 };
 
@@ -433,7 +437,9 @@ protected:
 
   //TODO
   //Give a representation.
-
+  typename AVLTNode<T>::Ref root_;
+  typename AVLTNode<T>::Ref current_;
+  typename AVLTNode<T>::Ref parent_;
   //
 
 };

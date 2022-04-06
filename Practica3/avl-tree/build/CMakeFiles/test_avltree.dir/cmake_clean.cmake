@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test_avltree.dir/test_avltree.cpp.o"
+  "CMakeFiles/test_avltree.dir/test_avltree.cpp.o.d"
   "test_avltree"
   "test_avltree.pdb"
 )
