@@ -15,20 +15,22 @@
 Trie::Trie()
 {
     //TODO
-
+      root_=nullptr;//es el nodo raiz
+      prefix_="";
     //
     assert(is_empty());
 }
 
 Trie::Ref Trie::create()
-{    
+{
     return std::make_shared<Trie>();
 }
 
 Trie::Trie(TrieNode::Ref root_node, std::string const& pref)
 {
     //TODO
-
+      root_=root_node;
+      prefix_=pref;
     //
     assert(prefix() == pref);
 }
@@ -45,7 +47,18 @@ Trie::Ref Trie::create(std::istream& in) noexcept(false)
 {
     Trie::Ref trie = nullptr;
     //TODO
-
+    std::string token;
+    in >> token;
+    if(token!="[")
+    {
+        throw std::runtime_error("Wrong input format");
+    }
+    else
+    {
+        auto aux = TrieNode::create(in);
+        trie = Trie::create(aux,"");
+        in >>token;
+    }
     //
     return trie;
 }
@@ -55,7 +68,9 @@ Trie::is_empty() const
 {
     bool ret_v=true;
     //TODO
-
+      if(root_!=nullptr){
+        ret_v=false;
+      }
     //
     return ret_v;
 }
@@ -65,7 +80,7 @@ Trie::prefix() const
 {
     std::string ret_val = "";
     //TODO
-
+      ret_val=prefix_;
     //
     return ret_val;
 }
@@ -76,7 +91,7 @@ Trie::is_key() const
     assert(!is_empty());
     bool ret_val = true;
     //TODO
-
+    ret_val=root_->is_key();
     //
     return ret_val;
 }
@@ -87,7 +102,7 @@ Trie::root() const
 {
     TrieNode::Ref node = nullptr;
     //TODO
-
+    node=root_;
     //
     return node;
 }
@@ -99,8 +114,9 @@ Trie::has(std::string const& k) const
     bool found = false;
     //TODO
     //Hint: use find_node() to do this.
-    //Remember: The Trie can have a prefix==k but does not store the key k.    
-
+    //Remember: The Trie can have a prefix==k but does not store the key k.
+    auto node = find_node(k);
+    found = node!=nullptr and node->is_key();
     //
     return found;
 }
@@ -112,6 +128,16 @@ preorder_traversal(TrieNode::Ref node, std::string prefix,
     //TODO
     //Remeber: node->is_key() means the prefix is a key too.
 
+      if(node->is_key() ){
+        keys.push_back(prefix);
+      }
+      node->goto_first_child();
+      while(node->current_exists()){
+        preorder_traversal(node->current_node(),prefix+node->current_symbol(),keys);
+        //prefix + node prefix lo que habia antes mas el simbolo del nodo
+        node->goto_next_child();
+      }
+
     //
 }
 
@@ -122,7 +148,7 @@ Trie::retrieve(std::vector<std::string>& keys) const
     assert(!is_empty());
     //TODO
     //Remenber add the subtrie's prefix to the retrieve keys.
-
+    preorder_traversal(root_,prefix(),keys);
     //
 }
 
@@ -133,7 +159,17 @@ Trie::child(std::string const& pref) const
     Trie::Ref ret_v = Trie::create();
     //TODO
     //Hint: use find_node() to do this.
-
+    auto node = root_;
+    for (auto c : pref)
+    {
+        if (!node->find_child(c))
+        {
+            return ret_v;
+        }
+        node = node->child(c);
+    }
+    ret_v->root_ = node;
+    ret_v->prefix_ = prefix_ + pref;
     //
     assert(ret_v != nullptr);
     return ret_v;
@@ -145,7 +181,7 @@ Trie::current_exists() const
     assert(!is_empty());
     bool ret_val = false;
     //TODO
-
+    ret_val = root_->current_exists();
     //
     return ret_val;
 }
@@ -156,7 +192,7 @@ Trie::current() const
     assert(current_exists());
     Trie::Ref trie = nullptr;
     //TODO
-
+    trie = create(root_->current_node(), prefix_+current_symbol());
     //
     return trie;
 }
@@ -167,7 +203,7 @@ Trie::current_symbol() const
     assert(current_exists());
     char symbol = 0;
     //TODO
-
+    return root_->current_symbol();
     //
     return symbol;
 }
@@ -177,7 +213,25 @@ Trie::insert(std::string const& k)
 {
     assert(k != "");
     //TODO
-
+if(root_==nullptr)
+    {
+        root_ = TrieNode::create(false);
+    }
+    auto node = root_;
+    for(size_t i=0; i<k.size();i++)
+    {
+        if(node->has(k[i]))
+        {
+            node = node->child(k[i]);
+        }
+        else
+        {
+            auto newNode = TrieNode::create(false);
+            node->set_child(k[i],newNode);
+            node = newNode;
+        }
+    }
+    node->set_is_key_state(true);
 
     //
     assert(!is_empty());
@@ -191,7 +245,20 @@ Trie::find_node(std::string const& pref) const
     TrieNode::Ref node;
     //TODO
     //Remenber: the prefix "" must return the trie's root node.
-
+      node = root_;
+    size_t i = 0;
+    while (i < pref.size() and node!=nullptr)
+    {
+        if(node->has(pref[i]))
+        {
+            node = node->child(pref[i]);
+            i++;
+        }
+        else
+        {
+            node = nullptr;
+        }
+    }
     //
     return node;
 }
@@ -200,7 +267,12 @@ std::ostream&
 Trie::fold(std::ostream& out) const
 {
     //TODO
-
+    out << "[ ";
+    if(root_ != nullptr)
+    {
+        root_->fold(out);
+    }
+    out << " ]";
     //
     return out;
 }
@@ -211,7 +283,7 @@ Trie::find_symbol(char symbol)
     assert(!is_empty());
     bool found = false;
     //TODO
-
+    found = root_->find_child(symbol);
     //
     assert(!found || current_exists());
     assert(found || !current_exists());
@@ -224,7 +296,7 @@ Trie::goto_first_symbol()
 {
     assert(!is_empty());
     //TODO
-
+    root_->goto_first_child();
     //
     assert(!current_exists() ||
            current()->prefix()==prefix()+current_symbol());
@@ -235,6 +307,6 @@ Trie::goto_next_symbol()
 {
     assert(current_exists());
     //TODO
-
+    root_->goto_next_child();
     //
 }

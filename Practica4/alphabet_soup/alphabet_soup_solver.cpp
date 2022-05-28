@@ -46,8 +46,75 @@ scan_cell(int row, int col, int dy, int dx, AlphabetSoup const& soup,
     //    (row,col) into the second item of scan_result (the stack of
     //    coordinates).
 
+    //1
+    if(trie->is_key()){
+        std::string node_value = trie->prefix();
+        scan_result.first = node_value;
+    }
+    //2
+    else
+    {
+        if (row >= 0 && row < soup.rows() && col >= 0 && col < soup.cols())
+        {
+            auto const cell_v = soup.cell(row, col);
+            if (trie->has(std::to_string(cell_v)))
+            {
 
+                trie = trie->child(std::to_string(cell_v));
+                bool found = false;
+                if (dx == 0 && dy == 0)
+                {
+                    for (int i = std::max(row - 1, 0); i < std::min(row + 2, soup.rows()) && !found; ++i)
+                        for (int j = std::max(col - 1, 0); j < std::min(col + 2, soup.cols()) && !found; ++j)
+                        {
+                            if (i != row || j != col)
+                            {
 
+                                if (scan_result.first == "") //Arriba a la izquierda
+                                    scan_cell(row - 1, col - 1, -1, -1, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Arriba a la derecha
+                                    scan_cell(row - 1, col + 1, 1, -1, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Abajo a la izquierda
+                                    scan_cell(row + 1, col - 1, -1, 1, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Abajo a la derecha
+                                    scan_cell(row + 1, col + 1, 1, 1, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Arriba
+                                    scan_cell(row - 1, col, 0, -1, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Izquierda
+                                    scan_cell(row, col - 1, -1, 0, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Derecha
+                                    scan_cell(row, col + 1, 1, 0, soup, trie, scan_result);
+
+                                if (scan_result.first == "") //Abajo
+                                    scan_cell(row + 1, col, 0, 1, soup, trie, scan_result);
+
+                                found = (scan_result.first != "");
+                            }
+                        }
+                }
+                else
+                {
+
+                    int next_col = col + dy;                                        //La columna en la que tendremos que buscar
+                    int next_row = row + dx;                                        //La fila en la que tenemos que buscar
+                    scan_cell(next_row, next_col, dy, dx, soup, trie, scan_result); //Llamamos recursivamente a la funcion para que siga buscando
+                    found = (scan_result.first != "");
+                }
+                if (found)
+                {
+
+                    auto coordinates = std::make_pair(row, col);
+                    scan_result.second.push(coordinates);
+                }
+            }
+        }
+    }
     //
 }
 

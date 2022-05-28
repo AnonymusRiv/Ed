@@ -1,5 +1,0 @@
-/home/anonymusriv/Escritorio/UCO/2curso/Ed/Practica4/alphabet_soup/build/CMakeFiles/test_trie_node.dir
-/home/anonymusriv/Escritorio/UCO/2curso/Ed/Practica4/alphabet_soup/build/CMakeFiles/test_trie.dir
-/home/anonymusriv/Escritorio/UCO/2curso/Ed/Practica4/alphabet_soup/build/CMakeFiles/test_alphabet_soup_solver.dir
-/home/anonymusriv/Escritorio/UCO/2curso/Ed/Practica4/alphabet_soup/build/CMakeFiles/edit_cache.dir
-/home/anonymusriv/Escritorio/UCO/2curso/Ed/Practica4/alphabet_soup/build/CMakeFiles/rebuild_cache.dir

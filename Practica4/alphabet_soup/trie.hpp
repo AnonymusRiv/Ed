@@ -67,7 +67,7 @@ public:
 
     /**
      * @brief Get the prefix of the root node.
-     * @return the prefix.     
+     * @return the prefix.
      */
     std::string prefix() const;
 
@@ -216,6 +216,7 @@ protected:
 
     //TODO
     TrieNode::Ref root_;
+    std::string prefix_;
+    TrieNode::Ref current_;
     //
 };
-
