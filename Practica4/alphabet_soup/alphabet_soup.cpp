@@ -1,12 +1,5 @@
 /**
  * @file alphabet_soup.cpp
- *
- * CopyRight F. J. Madrid-Cuevas <fjmadrid@uco.es>
- *
- * Sólo se permite el uso de este código en la docencia de las asignaturas sobre
- * Estructuras de Datos de la Universidad de Córdoba.
- *
- * Está prohibido su uso para cualquier otro objetivo.
  */
 
 #include "alphabet_soup.hpp"
